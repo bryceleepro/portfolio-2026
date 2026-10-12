@@ -762,6 +762,10 @@ a.tab {
     background: var(--background);
   }
 
+  .work-card--usdc-earn .media-frame.work-card__media {
+    margin-block: 64px 0;
+  }
+
   .work-card__meta {
     inset: 16px;
     align-content: space-between;

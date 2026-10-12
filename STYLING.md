@@ -119,7 +119,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 | Back / Back to top horizontal hit padding | 16px | `--action-pad-x` on `.action--back` only (offset so the label doesn’t shift). |
 | Work-card chips from bottom-left | 16px | `.work-card__meta` |
 | Work-card chips from edges on compact | 16px | top-left company + year; bottom-left title |
-| Compact work-card media matte | 32px | White above and below the thumb |
+| Compact work-card media matte | 32px | White above and below the thumb. USDC is 64px top / 0 bottom. |
 | Shell bottom padding | 4rem | `.site-shell` |
 | Compact About nav → title | 40px | 4rem − 24px |
 | Compact case nav → Back | 36px | `--space-md` − 24px |
@@ -175,7 +175,7 @@ Fixed labels + cycling HeroUI chips. Each row is a sentence (label, then one or 
 
 ### Work card (`.work-card`) — 2026-09-30
 
-700×400 media tile at the desktop measure (`--work-ratio`), 8px radius, 1px `--media-stroke` drawn on a `::after` above the media (same gray as case figures), chips 16px from bottom-left (company, title, year). Below 768px: Coinbase and the date pin to the top-left; the title chip stays bottom-left. The thumb keeps 700/400 and sits in a 32px white matte above and below so the chips don’t cover the whole visual; the card grows by those 64px. Whole card links to `/work/[slug]`. Empty `thumb` shows the gray placeholder; set `works[].thumb` to a file under `/public` (jpg, png, webp, gif, mp4, webm). The list row uses `aspect-ratio: 700 / 400` so height follows the column, like case-study figures — no fixed 400px. Activities uses the final-iteration MP4 with `activitiesCardCrop`, fitted to the card width so side bars clip and top/bottom overflow the tile. USDC uses `earn-hero-alt-4.png` with `object-fit: cover`. Both cards stay the same proportion at every width. Hover / focus scales to 0.98 and the `::after` stroke goes to `--media-stroke-hover` (`#cccccc`). Below 768px the press-in is off and the thumb fill is white, so a sticky hover doesn’t flash the grey tile at the matte. Transform does not change the row size, so the list doesn’t jump. MP4 thumbs and case figures autoplay muted, loop, and play inline (`playsinline` + a `play()` retry). No native play control; the video ignores pointer events so the card stays the hit. Why: entire card is the case-study hit target.
+700×400 media tile at the desktop measure (`--work-ratio`), 8px radius, 1px `--media-stroke` drawn on a `::after` above the media (same gray as case figures), chips 16px from bottom-left (company, title, year). Below 768px: Coinbase and the date pin to the top-left; the title chip stays bottom-left. The thumb keeps 700/400 and sits in a 32px white matte above and below so the chips don’t cover the whole visual; the card grows by those 64px. USDC’s thumb sits on the bottom edge (no bottom matte) with 64px on top, so the hero doesn’t hard-cut into white. Whole card links to `/work/[slug]`. Empty `thumb` shows the gray placeholder; set `works[].thumb` to a file under `/public` (jpg, png, webp, gif, mp4, webm). The list row uses `aspect-ratio: 700 / 400` so height follows the column, like case-study figures — no fixed 400px. Activities uses the final-iteration MP4 with `activitiesCardCrop`, fitted to the card width so side bars clip and top/bottom overflow the tile. USDC uses `earn-hero-alt-4.png` with `object-fit: cover`. Both cards stay the same proportion at every width. Hover / focus scales to 0.98 and the `::after` stroke goes to `--media-stroke-hover` (`#cccccc`). Below 768px the press-in is off and the thumb fill is white, so a sticky hover doesn’t flash the grey tile at the matte. Transform does not change the row size, so the list doesn’t jump. MP4 thumbs and case figures autoplay muted, loop, and play inline (`playsinline` + a `play()` retry). No native play control; the video ignores pointer events so the card stays the hit. Why: entire card is the case-study hit target.
 
 ### Site footer (`.site-footer`) — 2026-09-30
 
@@ -201,6 +201,11 @@ Figma vectors, native size preserved:
 - `/public/media/usdc/` — USDC figures (kebab-case). `banners.png` is Focus 1; `enrollment-modal.png` is Focus 2. Home thumb and Focus 3 share `earn-hero-alt-4.png`. Earlier Earn Center stills stay on disk. Source stills stay in `usdc_case_study_visuals/`.
 
 ## Changelog
+
+### 2026-10-12 — Compact USDC thumb sits on the bottom edge
+
+- Below 768px, USDC’s matte is 64px top and 0 bottom. Activities stays 32px both sides.
+- Why: the Earn hero was cutting off into the bottom white band.
 
 ### 2026-10-12 — Compact hover seam; tighter About and case tops
 

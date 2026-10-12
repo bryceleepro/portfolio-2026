@@ -14,7 +14,7 @@ export function WorkList() {
 
         return (
           <li key={item.slug}>
-            <NextLink href={`/work/${item.slug}`} className="work-card">
+            <NextLink href={`/work/${item.slug}`} className={`work-card work-card--${item.slug}`}>
               <MediaFrame
                 src={item.thumb}
                 alt=""
