@@ -16,8 +16,8 @@
   --reroll-fill-hover: #222222;
   --case-link-underline: #cccccc;
   --reroll-icon: #ffffff;
-  --reroll-radius: 100px;
-  --reroll-radius-hover: 8px;
+  --reroll-radius: 8px;
+  --reroll-hover-tilt: -32deg;
   --media-stroke: var(--reroll-ring);
   --media-stroke-hover: #cccccc;
   --case-video-ratio: 1520 / 1080;
@@ -145,7 +145,7 @@ body {
 .menu-toggle {
   display: none;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   width: 40px;
   height: 40px;
   margin-block: calc((40px - 16.8px) / -2);
@@ -490,17 +490,19 @@ a.tab {
   background: var(--reroll-fill);
   cursor: pointer;
   transform-origin: 50% 50%;
-  transition:
-    background-color var(--motion-duration) var(--motion-ease),
-    border-radius var(--motion-duration) var(--motion-ease),
-    transform var(--motion-duration) var(--motion-ease);
+  transition: background-color var(--motion-duration) var(--motion-ease);
 }
 
 .reroll:hover,
 .reroll:focus-visible,
-.reroll--spinning {
-  border-radius: var(--reroll-radius-hover);
+.reroll.reroll--spinning {
   background: var(--reroll-fill-hover);
+}
+
+.reroll.reroll--spinning {
+  animation-name: reroll-turn;
+  animation-duration: var(--reroll-turn-duration);
+  animation-timing-function: var(--motion-ease);
 }
 
 .reroll:focus-visible {
@@ -511,6 +513,23 @@ a.tab {
 .reroll img {
   display: block;
   pointer-events: none;
+  transform-origin: 50% 50%;
+  transition: transform var(--motion-duration) var(--motion-ease);
+}
+
+.reroll:hover img,
+.reroll:focus-visible img {
+  transform: rotate(var(--reroll-hover-tilt));
+}
+
+@keyframes reroll-turn {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -520,6 +539,15 @@ a.tab {
 
   .reroll {
     transition: none;
+  }
+
+  .reroll img,
+  .reroll:hover img,
+  .reroll:focus-visible img,
+  .reroll.reroll--spinning {
+    transition: none;
+    transform: none;
+    animation: none;
   }
 
   .tab,
@@ -686,6 +714,33 @@ a.tab {
   gap: var(--chip-gap);
 }
 
+.work-card__title-row {
+  display: contents;
+}
+
+@media (max-width: 767px) {
+  .work-card__meta {
+    inset: 16px;
+    align-content: space-between;
+    align-items: flex-start;
+  }
+
+  .work-card .chip--emphasis {
+    order: 1;
+  }
+
+  .work-card__year {
+    order: 2;
+  }
+
+  .work-card__title-row {
+    display: flex;
+    order: 3;
+    flex: 1 0 100%;
+    align-items: flex-end;
+  }
+}
+
 .media-frame {
   width: 100%;
   height: 400px;
@@ -700,6 +755,13 @@ a.tab {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
+}
+
+.media-frame video::-webkit-media-controls,
+.media-frame video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
 }
 
 .case-figure .media-frame {
@@ -746,6 +808,25 @@ a.tab {
 .site-footer {
   align-items: center;
   margin-top: var(--space-lg);
+}
+
+@media (max-width: 767px) {
+  .site-footer {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: var(--footer-gap);
+  }
+
+  .site-footer__actions .action__icon,
+  .site-footer__actions .action:hover .action__icon,
+  .site-footer__actions .action:focus-visible .action__icon {
+    width: 16px;
+    opacity: 1;
+  }
+
+  .site-footer__actions .action--copied .action__icon {
+    width: 18px;
+  }
 }
 
 .site-footer__updated,

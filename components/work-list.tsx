@@ -23,8 +23,10 @@ export function WorkList() {
               />
               <span className="work-card__meta">
                 <Chip className="chip chip--emphasis">{item.company}</Chip>
-                <Chip className="chip chip--meta">{title}</Chip>
-                <Chip className="chip chip--meta">{year}</Chip>
+                <span className="work-card__title-row">
+                  <Chip className="chip chip--meta">{title}</Chip>
+                </span>
+                <Chip className="chip chip--meta work-card__year">{year}</Chip>
               </span>
             </NextLink>
           </li>

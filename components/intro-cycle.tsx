@@ -13,9 +13,6 @@ import {
 const CHIP_SHRINK_MS = 200;
 const CHIP_POP_MS = 360;
 const CHIP_STAGGER_MS = 70;
-const REROLL_TURN_MS = 480;
-const REROLL_SHAPE_MS = 180;
-const CLICK_ROTATION = 360;
 const LINE_LABELS = [introLead, introWhoLabel, introCurrentlyLabel] as const;
 
 function nextVariantIndex(current: number) {
@@ -112,17 +109,21 @@ function widthsClose(a: [number, number][], b: [number, number][]) {
   );
 }
 
+function variantLineCount(text: string, firstMax: number, nextMax: number, probe: HTMLElement) {
+  return splitChipLines(text, firstMax, nextMax, probe).length;
+}
+
 export function IntroCycle() {
   const [index, setIndex] = useState(0);
-  const [rerollRot, setRerollRot] = useState(0);
+  const [rerollSpinning, setRerollSpinning] = useState(false);
   const [maxWidths, setMaxWidths] = useState<[number, number][]>([
     [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY],
     [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY],
     [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY],
   ]);
+  const [linesMinHeight, setLinesMinHeight] = useState<number | null>(null);
   const busyRef = useRef(false);
   const turningRef = useRef(false);
-  const rerollBtnRef = useRef<HTMLButtonElement>(null);
   const linesRef = useRef<HTMLDivElement>(null);
   const lineRefs = useRef<Array<HTMLParagraphElement | null>>([null, null, null]);
   const labelRefs = useRef<Array<HTMLSpanElement | null>>([null, null, null]);
@@ -163,6 +164,37 @@ export function IntroCycle() {
     });
   }
 
+  function measureLinesMinHeight(widths: [number, number][]) {
+    const root = linesRef.current;
+    const probe = probeRef.current;
+    const sample = root?.querySelector<HTMLElement>(".intro__chip-track");
+    const firstLine = lineRefs.current[0];
+    if (!root || !probe || !sample || !firstLine) {
+      return null;
+    }
+
+    const chipH = sample.offsetHeight;
+    if (chipH < 8) {
+      return null;
+    }
+
+    const wrapGap = parseFloat(getComputedStyle(firstLine).rowGap) || 4;
+    const lineGap = parseFloat(getComputedStyle(root).rowGap) || 12;
+    const fields = ["role", "who", "currently"] as const;
+
+    let max = 0;
+    for (const item of introVariants) {
+      const heights = fields.map((field, i) => {
+        const rows = variantLineCount(item[field], widths[i][0], widths[i][1], probe);
+        return rows * chipH + Math.max(0, rows - 1) * wrapGap;
+      });
+      const total = heights.reduce((sum, height) => sum + height, 0) + lineGap * (heights.length - 1);
+      max = Math.max(max, total);
+    }
+
+    return max;
+  }
+
   useLayoutEffect(() => {
     const apply = (force = false) => {
       const root = linesRef.current;
@@ -182,6 +214,12 @@ export function IntroCycle() {
 
       columnWidthRef.current = columnWidth;
       setMaxWidths((current) => (widthsClose(current, next) ? current : next));
+      const minHeight = measureLinesMinHeight(next);
+      if (minHeight) {
+        setLinesMinHeight((current) =>
+          current !== null && Math.abs(current - minHeight) < 2 ? current : minHeight,
+        );
+      }
     };
 
     apply(true);
@@ -246,17 +284,11 @@ export function IntroCycle() {
     }
 
     busyRef.current = true;
-    const btn = rerollBtnRef.current;
-    if (btn && !prefersReducedMotion()) {
+    if (!prefersReducedMotion()) {
       turningRef.current = true;
-      btn.classList.add("reroll--spinning");
-      await nextFrame();
-      btn.style.transition = [
-        "background-color var(--motion-duration) var(--motion-ease)",
-        "border-radius var(--motion-duration) var(--motion-ease)",
-        `transform ${REROLL_TURN_MS}ms var(--motion-ease)`,
-      ].join(", ");
-      setRerollRot(CLICK_ROTATION);
+      flushSync(() => {
+        setRerollSpinning(true);
+      });
     }
 
     try {
@@ -270,36 +302,22 @@ export function IntroCycle() {
     }
   }
 
-  function snapRerollHome() {
-    turningRef.current = false;
-    const btn = rerollBtnRef.current;
-    if (btn) {
-      btn.style.transition = [
-        "background-color var(--motion-duration) var(--motion-ease)",
-        "border-radius var(--motion-duration) var(--motion-ease)",
-        "transform 0s",
-      ].join(", ");
-      btn.classList.remove("reroll--spinning");
-    }
-    setRerollRot(0);
-    window.setTimeout(() => {
-      if (btn) {
-        btn.style.transition = "";
-      }
-    }, REROLL_SHAPE_MS);
-  }
-
-  function onRerollTransitionEnd(event: React.TransitionEvent<HTMLButtonElement>) {
-    if (event.propertyName !== "transform" || !turningRef.current) {
+  function onRerollSpinAnimationEnd(event: React.AnimationEvent<HTMLButtonElement>) {
+    if (event.target !== event.currentTarget || !turningRef.current) {
       return;
     }
-    snapRerollHome();
+    turningRef.current = false;
+    setRerollSpinning(false);
   }
 
   return (
     <section className="intro" aria-label="Introduction" aria-live="polite">
       <span ref={probeRef} className="intro__chip-probe" aria-hidden="true" />
-      <div ref={linesRef} className="intro__lines intro__chips">
+      <div
+        ref={linesRef}
+        className="intro__lines intro__chips"
+        style={linesMinHeight ? { minHeight: linesMinHeight } : undefined}
+      >
         {LINE_LABELS.map((label, row) => (
           <p
             key={label}
@@ -341,15 +359,14 @@ export function IntroCycle() {
         ))}
       </div>
       <button
-        ref={rerollBtnRef}
+        key="reroll"
         type="button"
-        className="reroll"
+        className={rerollSpinning ? "reroll reroll--spinning" : "reroll"}
         aria-label="Show another introduction"
-        style={{ transform: `rotate(${rerollRot}deg)` }}
         onClick={() => {
           void cycle();
         }}
-        onTransitionEnd={onRerollTransitionEnd}
+        onAnimationEnd={onRerollSpinAnimationEnd}
       >
         <img src="/icons/reroll.svg" alt="" width={40} height={40} />
       </button>

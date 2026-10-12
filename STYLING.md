@@ -6,7 +6,7 @@ Living log for this portfolio. Read before any UI work. Update in the same turn 
 
 - Intentional, minimal, elegant. Type and space do most of the work.
 - Quiet chrome. Home *is* the work list. Contact is hover-reveal actions, not a page.
-- Motion only to focus attention (chip cycle, reroll spin, action-icon reveal, work-card hover, Back / Back to top arrow nudge, tab underline slide, hamburger-to-X).
+- Motion only to focus attention (chip cycle, reroll wind-up and spin, action-icon reveal, work-card hover, Back / Back to top arrow nudge, tab underline slide, hamburger-to-X).
 - Light theme. Desktop look from Figma `Desktop - 1` (`1:2`). Work cards and case figures keep their ratio as the column shrinks. One nav breakpoint at 768px.
 - HeroUI primitives (`Link`, `Chip`) stay semantic; look comes from tokens and layout classes.
 
@@ -29,8 +29,8 @@ Defined in `app/globals.css`.
 | `--reroll-fill-hover` | `#222222` | Reroll hover / spin fill. A step lighter than rest. |
 | `--case-link-underline` | `#cccccc` | Default underline on `.case-link`. Same gray as `--media-stroke-hover`. |
 | `--reroll-icon` | `#ffffff` | Drawn in `/icons/reroll.svg` |
-| `--reroll-radius` | `100px` | Rest (circle) |
-| `--reroll-radius-hover` | `8px` | Hover and while spinning |
+| `--reroll-radius` | `8px` | Always (rounded rectangle) |
+| `--reroll-hover-tilt` | `-32deg` | Icon wind-up on hover / focus |
 | `--media-stroke` | `var(--reroll-ring)` | 1px outline on case-study figures and work cards. Same gray as the reroll ring. |
 | `--media-stroke-hover` | `#cccccc` | Work-card stroke on hover / focus. A step darker than `--media-stroke`. |
 | `--case-video-ratio` | `1520 / 1080` | Default Activities video crop. Overridden per figure via `--media-ratio`. |
@@ -117,6 +117,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 | Chrome vertical hit padding | 8px | `--action-pad-y` on `.tab` and `.action` (offset so labels don’t drop). Reroll and work cards excluded. |
 | Back / Back to top horizontal hit padding | 16px | `--action-pad-x` on `.action--back` only (offset so the label doesn’t shift). |
 | Work-card chips from bottom-left | 16px | `.work-card__meta` |
+| Work-card chips from edges on compact | 16px | top-left company + year; bottom-left title |
 | Shell bottom padding | 4rem | `.site-shell` |
 | Compact menu panel inset | 16px | `.site-header__actions` below 768 |
 | Compact menu below hamburger | 8px | |
@@ -132,7 +133,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 ### Link / tab (`.tab`)
 
 - Work / About use Next.js `Link` (client routing). Idle tabs are `--tab-idle`; hover / focus / active are `--foreground`. A single 24×1px mark sits under the active label and slides 280ms when moving between Work and About. Work is active only on `/`; About only on `/about`. Case studies hide the mark (both tabs idle). Reduced motion jumps. Same 8px vertical hit padding as the other chrome controls (`--action-pad-y`).
-- Below 768px: Work + About stay; Resume / LinkedIn / Email move into a hamburger menu (18px marks in a 40×40 hit). Bars are 13×1 at y 5 / 9 / 13 (equal 3px gaps). Open morphs the three bars into an X (180ms); close morphs back. Reduced motion jumps. Panel is right-aligned, 8px radius, 1px `--media-stroke`, 16px pad, 24px stack. Icons stay visible in the panel (no hover-reveal). Escape or outside press closes it.
+- Below 768px: Work + About stay; Resume / LinkedIn / Email move into a hamburger menu (18px marks in a 40×40 hit). The 18px icon sits on the right of that hit so it lines up with the same gutter as Work on the left. Bars are 13×1 at y 5 / 9 / 13 (equal 3px gaps). Open morphs the three bars into an X (180ms); close morphs back. Reduced motion jumps. Panel is right-aligned, 8px radius, 1px `--media-stroke`, 16px pad, 24px stack. Icons stay visible in the panel (no hover-reveal). Escape or outside press closes it.
 - Case study Back uses Next.js `Link` with `.action.action--back`. The Material arrow (weight 300, left) sits before the label and stays visible. Hover / focus-visible nudges the arrow 4px left over 180ms. Reduced motion keeps it still.
 - Case study **Back to top** sits on its own line after the last section (up arrow, weight 300). Hover / focus-visible nudges the arrow 4px up over 180ms. Click smooth-scrolls to the top; reduced motion jumps and skips the nudge.
 - Case study footer left is “Thanks for reading! Let's keep in touch.” (16px muted). Home keeps “Updated …”. About has no footer.
@@ -142,16 +143,16 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 
 - Resume, LinkedIn: `<a>` with Figma 16px icons (`/icons/resume.svg`, `/icons/linkedin.svg`) — external-arrow. `http(s)` hrefs (LinkedIn) open in a new tab with `rel="noopener noreferrer"`. Resume stays `#` until a file exists.
 - Email: label is always “Email”. Hover shows the 16px copy icon. Press copies `site.email` and shows the 18px check for 800ms even if the pointer leaves. Then the icon hides; if the pointer is still on Email, it stays hidden until leave (so the copy icon doesn’t pop back immediately).
-- Resume/LinkedIn icons sit in a 0-width wrapper and open to 16px / opacity 1 on hover and focus. Why: Figma hid those layers until hover.
-- 8px padding above and below the label (`--action-pad-y`), pulled back with −8px margin so the header/footer line doesn’t drop. Shared with Work / About. Reroll stays the 40×40 circle.
+- Resume/LinkedIn icons sit in a 0-width wrapper and open to 16px / opacity 1 on hover and focus. Why: Figma hid those layers until hover. Below 768px, footer icons stay visible (no hover).
+- 8px padding above and below the label (`--action-pad-y`), pulled back with −8px margin so the header/footer line doesn’t drop. Shared with Work / About. Reroll stays the 40×40 rounded rectangle.
 - Back and Back to top also get 16px horizontal hit padding (`--action-pad-x`), pulled back with −16px margin. Tabs do not.
 - Focus: 2px solid `--foreground`; offset 3px on actions and reroll, 4px on work cards. Work-card hover / focus scales to `0.98` (press-in). Reduced motion: no scale.
 
 ### Button / reroll (`.reroll`)
 
-- Native 40×40 button. Rest: `--reroll-fill` `#000000`, no stroke, `--reroll-radius` 100px (circle), white icon (`/icons/reroll.svg`, do not override SVG width/height). Hit target is the control; no extra slop.
-- Hover / focus: fill `--reroll-fill-hover` `#222222`, radius 8px (`--reroll-radius-hover`).
-- Click: locks the 8px / `#222222` shape (`.reroll--spinning`) and the button spins clockwise 360° (480ms). Rotation snaps to 0°; radius and fill ease back to the circle over 180ms, same as hover. If the pointer is still over it, hover keeps the 8px square.
+- Native 40×40 button. Rest and hover: `--reroll-fill` `#000000`, no stroke, `--reroll-radius` 8px (rounded rectangle), white icon (`/icons/reroll.svg`, do not override SVG width/height). Hit target is the control; no extra slop. Same on desktop and compact.
+- Hover / focus: fill `--reroll-fill-hover` `#222222`; the icon winds `--reroll-hover-tilt` (−32°) counterclockwise. The button stays 8px.
+- Click: locks the hover fill (`.reroll--spinning`) and the whole 8px button turns clockwise 360° (480ms). If the pointer is still over it, hover keeps the icon at −32°.
 - Chips pick a random *other* variant. First load is always intro variant 0.
 
 ## Components
@@ -166,15 +167,15 @@ Work + About left (32px gap); Resume + LinkedIn + Email right. Idle tabs `#70707
 
 ### Intro (`.intro`, `.intro__line`, `.intro__chip-track`) — 2026-09-30
 
-Fixed labels + cycling HeroUI chips. Each row is a sentence (label, then one or more hugging pills). The gray fill lives on `.intro__chip-track` so width can hug content while radius stays. Intro lines are 100% of the column so wrap is decided against that width, not the current chip hug. If the chip cannot fit beside the label, extra words become their own pills on the next row, 4px below. 12px between the three sentences, 24px to reroll. Why: Figma “Sentence Style” / re-roll set `13:226`.
+Fixed labels + cycling HeroUI chips. Each row is a sentence (label, then one or more hugging pills). The gray fill lives on `.intro__chip-track` so width can hug content while radius stays. Intro lines are 100% of the column so wrap is decided against that width, not the current chip hug. If the chip cannot fit beside the label, extra words become their own pills on the next row, 4px below. 12px between the three sentences, 24px to reroll. The lines block’s min-height is the tallest variant at the current column (every wrap counted), so the reroll button stays put when copy is shorter. Why: Figma “Sentence Style” / re-roll set `13:226`.
 
 ### Work card (`.work-card`) — 2026-09-30
 
-700×400 media tile at the desktop measure (`--work-ratio`), 8px radius, 1px `--media-stroke` drawn on a `::after` above the media (same gray as case figures), chips 16px from bottom-left. Whole card links to `/work/[slug]`. Empty `thumb` shows the gray placeholder; set `works[].thumb` to a file under `/public` (jpg, png, webp, gif, mp4, webm). The list row uses `aspect-ratio: 700 / 400` so height follows the column, like case-study figures — no fixed 400px. Activities uses the final-iteration MP4 with `activitiesCardCrop`, fitted to the card width so side bars clip and top/bottom overflow the tile. USDC uses `earn-hero-alt-4.png` with `object-fit: cover`. Both cards stay the same proportion at every width. Hover / focus scales to 0.98 and the `::after` stroke goes to `--media-stroke-hover` (`#cccccc`). Transform does not change the row size, so the list doesn’t jump. Why: entire card is the case-study hit target.
+700×400 media tile at the desktop measure (`--work-ratio`), 8px radius, 1px `--media-stroke` drawn on a `::after` above the media (same gray as case figures), chips 16px from bottom-left (company, title, year). Below 768px: Coinbase and the date pin to the top-left; the title chip stays bottom-left. Whole card links to `/work/[slug]`. Empty `thumb` shows the gray placeholder; set `works[].thumb` to a file under `/public` (jpg, png, webp, gif, mp4, webm). The list row uses `aspect-ratio: 700 / 400` so height follows the column, like case-study figures — no fixed 400px. Activities uses the final-iteration MP4 with `activitiesCardCrop`, fitted to the card width so side bars clip and top/bottom overflow the tile. USDC uses `earn-hero-alt-4.png` with `object-fit: cover`. Both cards stay the same proportion at every width. Hover / focus scales to 0.98 and the `::after` stroke goes to `--media-stroke-hover` (`#cccccc`). Transform does not change the row size, so the list doesn’t jump. MP4 thumbs and case figures autoplay muted, loop, and play inline (`playsinline` + a `play()` retry). No native play control; the video ignores pointer events so the card stays the hit. Why: entire card is the case-study hit target.
 
 ### Site footer (`.site-footer`) — 2026-09-30
 
-Hidden on About. On home: “Updated …” from `site.updatedAt` (14px, `--label`; GitHub link if `site.githubHref` is set). Current date is October 11, 2026. On case studies: “Thanks for reading! Let's keep in touch.” (16px, `--label`). Resume, LinkedIn, Email with the same hover icons as the header. LinkedIn opens in a new tab. 120px above the work list on home; 60px above the thanks line (same as last content → Back to top). Why: Figma footer. About is short enough that a second contact row is redundant.
+Hidden on About. On home: “Updated …” from `site.updatedAt` (14px, `--label`; GitHub link if `site.githubHref` is set). Current date is October 11, 2026. On case studies: “Thanks for reading! Let's keep in touch.” (16px, `--label`). Resume, LinkedIn, Email with the same hover icons as the header. LinkedIn opens in a new tab. Below 768px the footer is a column: the three actions on top (icons always visible), then the date / thanks line, 24px apart, left-aligned. 120px above the work list on home; 60px above the thanks line (same as last content → Back to top). Why: Figma footer. About is short enough that a second contact row is redundant.
 
 ### About / case study (`.page-title`, `.about`, `.blank-copy`, `.case-back`, `.case`) — 2026-10-06
 
@@ -196,6 +197,42 @@ Figma vectors, native size preserved:
 - `/public/media/usdc/` — USDC figures (kebab-case). `banners.png` is Focus 1; `enrollment-modal.png` is Focus 2. Home thumb and Focus 3 share `earn-hero-alt-4.png`. Earlier Earn Center stills stay on disk. Source stills stay in `usdc_case_study_visuals/`.
 
 ## Changelog
+
+### 2026-10-11 — Reroll stays at the lowest intro slot
+
+- `.intro__lines` min-height is the tallest variant at the current column width, including wrapped chip rows. The 40×40 reroll sits 24px below that, so it does not jump when a shorter intro is showing.
+- Why: wrapping copy was moving the button; keeping the cursor on it needs a fixed hit.
+
+### 2026-10-11 — Reroll button spins on click
+
+- Click turns the 8px button clockwise 360° (480ms), not only the icon. Hover still winds the icon −32°.
+- Why: the rectangle should spin with the cycle, same as the earlier filled control.
+
+### 2026-10-11 — Reroll stays rectangular; icon winds on hover
+
+- `--reroll-radius` is 8px at rest and hover, desktop and compact. The circle / morph-to-square is gone.
+- Hover / focus tilts the icon −32° counterclockwise (`--reroll-hover-tilt`). Click still turns the icon clockwise 360°, not the button.
+- Why: the shape change fought touch hover; the older wind-up is the hover cue again.
+
+### 2026-10-11 — Compact footer stacks; icons stay visible
+
+- Below 768px the footer is a column: Resume / LinkedIn / Email on top, date or thanks underneath, 24px gap, left-aligned. Action icons stay visible (same as the compact header menu).
+- Why: the side-by-side footer and hover-only icons don’t work on a phone.
+
+### 2026-10-11 — Compact work chips: company + date top, title bottom
+
+- Below 768px, work-card chips split: Coinbase and the year sit 16px from the top-left; the title chip stays 16px from the bottom-left. Desktop is still one bottom-left row.
+- Why: three chips in one corner overflowed on a phone column.
+
+### 2026-10-11 — Work-card video autoplays on mobile
+
+- Looping MP4s set `muted` / `playsinline` on the element and call `play()` on load, visibility, and pageshow. Native start-playback controls are hidden.
+- Why: iOS was showing a play button on the Activities thumb instead of looping the recording.
+
+### 2026-10-11 — Hamburger lines up with Work’s gutter
+
+- Compact menu icon is right-aligned in the 40×40 hit (`justify-content: flex-end`). Same 24px inset as Work on the left.
+- Why: centering the 18px marks in the hit made the bars sit 11px inside the column.
 
 ### 2026-10-11 — Tighter overflow chips; even hamburger bars
 
