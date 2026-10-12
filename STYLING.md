@@ -119,8 +119,10 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 | Back / Back to top horizontal hit padding | 16px | `--action-pad-x` on `.action--back` only (offset so the label doesn’t shift). |
 | Work-card chips from bottom-left | 16px | `.work-card__meta` |
 | Work-card chips from edges on compact | 16px | top-left company + year; bottom-left title |
+| Compact work-card media matte | 32px | White above and below the thumb |
 | Shell bottom padding | 4rem | `.site-shell` |
-| Compact About nav → title | 4rem | same as shell bottom |
+| Compact About nav → title | 40px | 4rem − 24px |
+| Compact case nav → Back | 36px | `--space-md` − 24px |
 | Compact menu panel inset | 16px | `.site-header__actions` below 768 |
 | Compact menu below hamburger | 8px | |
 
@@ -148,7 +150,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 - Resume/LinkedIn icons sit in a 0-width wrapper and open to 16px / opacity 1 on hover and focus. Why: Figma hid those layers until hover. Below 768px, footer icons stay visible (no hover).
 - 8px padding above and below the label (`--action-pad-y`), pulled back with −8px margin so the header/footer line doesn’t drop. Shared with Work / About. Reroll stays the 40×40 rounded rectangle.
 - Back and Back to top also get 16px horizontal hit padding (`--action-pad-x`), pulled back with −16px margin. Tabs do not.
-- Focus: 2px solid `--foreground`; offset 3px on actions and reroll, 4px on work cards. Work-card hover / focus scales to `0.98` (press-in). Reduced motion: no scale.
+- Focus: 2px solid `--foreground`; offset 3px on actions and reroll, 4px on work cards. Work-card hover / focus scales to `0.98` (press-in) on desktop. Below 768px there is no hover scale — sticky tap hover was flashing a grey seam at the matte. Reduced motion: no scale.
 
 ### Button / reroll (`.reroll`)
 
@@ -165,7 +167,7 @@ Centered 700px column, 24px top, 24px side gutter, 4rem bottom. Why: Figma deskt
 
 ### Site header (`.site-header`) — 2026-09-30
 
-Work + About left (32px gap); Resume + LinkedIn + Email right. Idle tabs `#707070`; hover and the active tab are black. One 24×1px mark slides between them (280ms). Case studies show no mark. 120px below to intro on home; 60px below to Back on case studies. The bar sits in document flow and scrolls away with the page — it does not pin. After it has left the viewport, scroll-up brings it back as a fixed overlay (`.site-header-bar--return`) with one 32px white-to-clear fade underneath. Scroll-down dismisses the overlay. Near the top, the in-flow header takes over again. Reduced motion: no overlay. Below 768px the right side is a hamburger that opens the three actions. Why: left side is tabs; right side is destinations/copy.
+Work + About left (32px gap); Resume + LinkedIn + Email right. Idle tabs `#707070`; hover and the active tab are black. One 24×1px mark slides between them (280ms). Case studies show no mark. 120px below to intro on home; 60px below to Back on case studies (36px below 768). The bar sits in document flow and scrolls away with the page — it does not pin. After it has left the viewport, scroll-up brings it back as a fixed overlay (`.site-header-bar--return`) with one 32px white-to-clear fade underneath. Scroll-down dismisses the overlay. Near the top, the in-flow header takes over again. Reduced motion: no overlay. Below 768px the right side is a hamburger that opens the three actions. Why: left side is tabs; right side is destinations/copy.
 
 ### Intro (`.intro`, `.intro__line`, `.intro__chip-track`) — 2026-09-30
 
@@ -173,7 +175,7 @@ Fixed labels + cycling HeroUI chips. Each row is a sentence (label, then one or 
 
 ### Work card (`.work-card`) — 2026-09-30
 
-700×400 media tile at the desktop measure (`--work-ratio`), 8px radius, 1px `--media-stroke` drawn on a `::after` above the media (same gray as case figures), chips 16px from bottom-left (company, title, year). Below 768px: Coinbase and the date pin to the top-left; the title chip stays bottom-left. Whole card links to `/work/[slug]`. Empty `thumb` shows the gray placeholder; set `works[].thumb` to a file under `/public` (jpg, png, webp, gif, mp4, webm). The list row uses `aspect-ratio: 700 / 400` so height follows the column, like case-study figures — no fixed 400px. Activities uses the final-iteration MP4 with `activitiesCardCrop`, fitted to the card width so side bars clip and top/bottom overflow the tile. USDC uses `earn-hero-alt-4.png` with `object-fit: cover`. Both cards stay the same proportion at every width. Hover / focus scales to 0.98 and the `::after` stroke goes to `--media-stroke-hover` (`#cccccc`). Transform does not change the row size, so the list doesn’t jump. MP4 thumbs and case figures autoplay muted, loop, and play inline (`playsinline` + a `play()` retry). No native play control; the video ignores pointer events so the card stays the hit. Why: entire card is the case-study hit target.
+700×400 media tile at the desktop measure (`--work-ratio`), 8px radius, 1px `--media-stroke` drawn on a `::after` above the media (same gray as case figures), chips 16px from bottom-left (company, title, year). Below 768px: Coinbase and the date pin to the top-left; the title chip stays bottom-left. The thumb keeps 700/400 and sits in a 32px white matte above and below so the chips don’t cover the whole visual; the card grows by those 64px. Whole card links to `/work/[slug]`. Empty `thumb` shows the gray placeholder; set `works[].thumb` to a file under `/public` (jpg, png, webp, gif, mp4, webm). The list row uses `aspect-ratio: 700 / 400` so height follows the column, like case-study figures — no fixed 400px. Activities uses the final-iteration MP4 with `activitiesCardCrop`, fitted to the card width so side bars clip and top/bottom overflow the tile. USDC uses `earn-hero-alt-4.png` with `object-fit: cover`. Both cards stay the same proportion at every width. Hover / focus scales to 0.98 and the `::after` stroke goes to `--media-stroke-hover` (`#cccccc`). Below 768px the press-in is off and the thumb fill is white, so a sticky hover doesn’t flash the grey tile at the matte. Transform does not change the row size, so the list doesn’t jump. MP4 thumbs and case figures autoplay muted, loop, and play inline (`playsinline` + a `play()` retry). No native play control; the video ignores pointer events so the card stays the hit. Why: entire card is the case-study hit target.
 
 ### Site footer (`.site-footer`) — 2026-09-30
 
@@ -181,7 +183,7 @@ Hidden on About. On home: “Updated …” from `site.updatedAt` (14px, `--labe
 
 ### About / case study (`.page-title`, `.about`, `.blank-copy`, `.case-back`, `.case`) — 2026-10-06
 
-About opens with “Hello! I'm Bryce.” in the case-study title style (20px Satoshi Medium, black, line-height 1.3). The tab already says About, so the page does not repeat it. Three body paragraphs follow (`.case-copy`: 16px / 1.5, Satoshi Regular, `--foreground-muted`). Title → first paragraph and paragraph → paragraph are 24px (`--space-copy`). No photo yet; no Back / Back to top; no footer. Header still uses the home 120px gap on desktop. Below 768px, nav → title is 4rem — the same as the shell’s bottom padding — so About starts higher and the page is even. Case studies keep Back, then title (20px Medium, black, line-height 1.3), a muted date (16px / 1.5), and sections. Body, ledes, lists, and section labels are 16px / 1.5. Captions are 14px / 1.4, centered under the tile. After the last section: 60px, Back to top, 60px, then the footer thanks line. Spacing: 8 / 24 / 60 (see Space). Home stays at 120px large gaps. Work cards sit 44px apart. **Titles keep their written case; everything else is sentence case** (dates, ledes, labels, body). Activities date is “Summer 2025”. USDC home chip and page share “Scaling the Institutional USDC Experience” and “2025 - present”. USDC section labels are Overview and Focus 1–3 (numbered like Principle n, so they don’t repeat the lede). Focus 1 uses `banners.png` (`usdcBanners`: 6400×5040, 471px off top and bottom — about 48px at the rendered width). Focus 2 uses `enrollment-modal.png` at native 6400×3600 (`usdcEnrollmentModal`). Focus 3 uses `earn-hero-alt-4.png` at native 4800×2688 (`usdcEarnHero`). All three fill the column with the same 1px `--media-stroke` as other figures. Case-study figures fill the 700px measure. Cropped media is sized so the visible window is 100% of the frame; overflow clips the insets (not `object-fit: cover`). Case-study videos hang 2px below the clip to hide the green H.264 chroma row on the last source line. Activities crops are per visual (pixel insets on `crop`) and do not try to share one zoom — full-page shots and tight component shots are different patterns. Solution / splitting / copy / final / video-authorization trim leftover export lines (1–3px). Solution is −3px left, −2px right, −2px bottom. Iteration 2 and error states use a centered crop at their zoom. Iteration 1 is unchanged. Every figure and work card has a 1px `--media-stroke`. Work-card tiles use `--work-ratio` (`700 / 400`) so height follows the column. Home lists Activities and USDC only; the Exploring card is held for a later launch. Why: related lines sit together; new sections get more air.
+About opens with “Hello! I'm Bryce.” in the case-study title style (20px Satoshi Medium, black, line-height 1.3). The tab already says About, so the page does not repeat it. Three body paragraphs follow (`.case-copy`: 16px / 1.5, Satoshi Regular, `--foreground-muted`). Title → first paragraph and paragraph → paragraph are 24px (`--space-copy`). No photo yet; no Back / Back to top; no footer. Header still uses the home 120px gap on desktop. Below 768px, nav → title is 40px (4rem − 24). Case studies keep Back, then title (20px Medium, black, line-height 1.3), a muted date (16px / 1.5), and sections. Body, ledes, lists, and section labels are 16px / 1.5. Captions are 14px / 1.4, centered under the tile. After the last section: 60px, Back to top, 60px, then the footer thanks line. Spacing: 8 / 24 / 60 (see Space). Home stays at 120px large gaps. Work cards sit 44px apart. **Titles keep their written case; everything else is sentence case** (dates, ledes, labels, body). Activities date is “Summer 2025”. USDC home chip and page share “Scaling the Institutional USDC Experience” and “2025 - present”. USDC section labels are Overview and Focus 1–3 (numbered like Principle n, so they don’t repeat the lede). Focus 1 uses `banners.png` (`usdcBanners`: 6400×5040, 471px off top and bottom — about 48px at the rendered width). Focus 2 uses `enrollment-modal.png` at native 6400×3600 (`usdcEnrollmentModal`). Focus 3 uses `earn-hero-alt-4.png` at native 4800×2688 (`usdcEarnHero`). All three fill the column with the same 1px `--media-stroke` as other figures. Case-study figures fill the 700px measure. Cropped media is sized so the visible window is 100% of the frame; overflow clips the insets (not `object-fit: cover`). Case-study videos hang 2px below the clip to hide the green H.264 chroma row on the last source line. Activities crops are per visual (pixel insets on `crop`) and do not try to share one zoom — full-page shots and tight component shots are different patterns. Solution / splitting / copy / final / video-authorization trim leftover export lines (1–3px). Solution is −3px left, −2px right, −2px bottom. Iteration 2 and error states use a centered crop at their zoom. Iteration 1 is unchanged. Every figure and work card has a 1px `--media-stroke`. Work-card tiles use `--work-ratio` (`700 / 400`) so height follows the column. Home lists Activities and USDC only; the Exploring card is held for a later launch. Why: related lines sit together; new sections get more air.
 
 ## Assets
 
@@ -199,6 +201,22 @@ Figma vectors, native size preserved:
 - `/public/media/usdc/` — USDC figures (kebab-case). `banners.png` is Focus 1; `enrollment-modal.png` is Focus 2. Home thumb and Focus 3 share `earn-hero-alt-4.png`. Earlier Earn Center stills stay on disk. Source stills stay in `usdc_case_study_visuals/`.
 
 ## Changelog
+
+### 2026-10-12 — Compact hover seam; tighter About and case tops
+
+- Below 768px, work-card hover no longer scales or darkens the stroke, and the thumb fill is white instead of `--tile`.
+- Compact About nav → title is 40px (was 4rem). Compact case nav → Back is 36px (was 60).
+- Why: tap-hover showed a grey line at the matte; both pages still sat a little low.
+
+### 2026-10-12 — Compact work matte is 32px
+
+- Below 768px the thumb’s white band is 32px top and bottom (was 16). Chips stay 16px from the card edges.
+- Why: 16px still left the chips sitting on the visual.
+
+### 2026-10-12 — Compact work thumbs get a 16px white matte
+
+- Below 768px the 700/400 thumb sits 16px from the top and bottom of the card. Chips stay 16px from the card edges, in that white band. Desktop still fills the tile.
+- Why: on a phone column the chips were covering too much of the visual.
 
 ### 2026-10-12 — Compact About matches top and bottom padding
 

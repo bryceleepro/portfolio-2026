@@ -89,7 +89,11 @@ body {
 
 @media (max-width: 767px) {
   .site-shell:has(.about) .site-header-slot {
-    margin-bottom: 4rem;
+    margin-bottom: calc(4rem - var(--space-copy));
+  }
+
+  .site-shell:has(.case-page) .site-header-slot {
+    margin-bottom: calc(var(--space-md) - var(--space-copy));
   }
 }
 
@@ -731,6 +735,33 @@ a.tab {
 }
 
 @media (max-width: 767px) {
+  .work-list > li {
+    aspect-ratio: auto;
+  }
+
+  .work-card {
+    height: auto;
+    background: var(--background);
+  }
+
+  .work-card:hover {
+    transform: none;
+  }
+
+  .work-card:hover::after {
+    border-color: var(--media-stroke);
+  }
+
+  .work-card .media-frame.work-card__media {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--work-ratio);
+    margin-block: 32px;
+    background: var(--background);
+  }
+
   .work-card__meta {
     inset: 16px;
     align-content: space-between;
