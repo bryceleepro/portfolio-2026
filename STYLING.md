@@ -145,7 +145,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 
 ### Text action (`.action`)
 
-- Resume, LinkedIn: `<a>` with Figma 16px icons (`/icons/resume.svg`, `/icons/linkedin.svg`) — external-arrow. `http(s)` hrefs (LinkedIn) open in a new tab with `rel="noopener noreferrer"`. Resume stays `#` until a file exists.
+- Resume, LinkedIn: `<a>` with Figma 16px icons (`/icons/resume.svg`, `/icons/linkedin.svg`) — external-arrow. `http(s)` hrefs (LinkedIn) and `.pdf` (Resume → `/resume.pdf`) open in a new tab with `rel="noopener noreferrer"`.
 - Email: label is always “Email”. Hover shows the 16px copy icon. Press copies `site.email` and shows the 18px check for 800ms even if the pointer leaves. Then the icon hides; if the pointer is still on Email, it stays hidden until leave (so the copy icon doesn’t pop back immediately).
 - Resume/LinkedIn icons sit in a 0-width wrapper and open to 16px / opacity 1 on hover and focus. Why: Figma hid those layers until hover. Below 768px, footer icons stay visible (no hover).
 - 8px padding above and below the label (`--action-pad-y`), pulled back with −8px margin so the header/footer line doesn’t drop. Shared with Work / About. Reroll stays the 40×40 rounded rectangle.
@@ -179,7 +179,7 @@ Fixed labels + cycling HeroUI chips. Each row is a sentence (label, then one or 
 
 ### Site footer (`.site-footer`) — 2026-09-30
 
-Hidden on About. On home: “Updated …” from `site.updatedAt` (14px, `--label`; GitHub link if `site.githubHref` is set). Current date is October 11, 2026. On case studies: “Thanks for reading! Let's keep in touch.” (16px, `--label`). Resume, LinkedIn, Email with the same hover icons as the header. LinkedIn opens in a new tab. Below 768px the footer is a column: the three actions on top (icons always visible), then the date / thanks line, 24px apart, left-aligned. 120px above the work list on home; 60px above the thanks line (same as last content → Back to top). Why: Figma footer. About is short enough that a second contact row is redundant.
+Hidden on About. On home: “Updated …” from `site.updatedAt` (14px, `--label`; GitHub link if `site.githubHref` is set). Current date is October 11, 2026. On case studies: “Thanks for reading! Let's keep in touch.” (16px, `--label`). Resume, LinkedIn, Email with the same hover icons as the header. Resume and LinkedIn open in a new tab. Below 768px the footer is a column: the three actions on top (icons always visible), then the date / thanks line, 24px apart, left-aligned. 120px above the work list on home; 60px above the thanks line (same as last content → Back to top). Why: Figma footer. About is short enough that a second contact row is redundant.
 
 ### About / case study (`.page-title`, `.about`, `.blank-copy`, `.case-back`, `.case`) — 2026-10-06
 
@@ -196,11 +196,17 @@ Figma vectors, native size preserved:
 - `/public/icons/email.svg` — 16×16 copy (`17:511`)
 - `/public/icons/check.svg` — 18×18 Material check after email copy
 - `/public/icons/back.svg` — original 18px Material export; Back uses the inline 16px SVG instead
+- `/public/resume.pdf` — Resume. Header and footer `site.resumeHref` (`/resume.pdf`). Opens in a new tab.
 - `/public/media/` — work thumbs and case-study figures. Drop jpg / png / webp / gif / mp4 / webm and point `works[].thumb` or a figure’s `src` at `/media/...`. Empty `src` keeps the gray tile.
 - `/public/media/activities/` — Activities figures (kebab-case). Looping MP4 for motion; `iteration-1.png` for the still. Source recordings (including unused GIFs and “highlighting actions”) stay in `activity_case_study_visuals/`.
 - `/public/media/usdc/` — USDC figures (kebab-case). `banners.png` is Focus 1; `enrollment-modal.png` is Focus 2. Home thumb and Focus 3 share `earn-hero-alt-4.png`. Earlier Earn Center stills stay on disk. Source stills stay in `usdc_case_study_visuals/`.
 
 ## Changelog
+
+### 2026-10-12 — Resume opens the PDF
+
+- `site.resumeHref` is `/resume.pdf` (file in `/public`). Header and footer open it in a new tab, same as LinkedIn.
+- Why: the Resume action was still `#`.
 
 ### 2026-10-12 — Compact USDC thumb sits on the bottom edge
 

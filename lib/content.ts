@@ -1,12 +1,12 @@
 import { activitiesCardCrop } from "@/lib/case-studies";
 import type { MediaCrop } from "@/lib/media";
 
-/** Site copy and placeholders. Resume href is still a stub. */
+/** Site copy and destinations. */
 
 export const site = {
   name: "Bryce Lee",
   email: "brycelee@umich.edu",
-  resumeHref: "#",
+  resumeHref: "/resume.pdf",
   linkedinHref: "https://www.linkedin.com/in/lee-bryce",
   /** Set once a public repo exists; footer date becomes a link. */
   githubHref: "",

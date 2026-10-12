@@ -31,7 +31,10 @@ export function TextAction({
   );
 
   if (href) {
-    const external = href.startsWith("http://") || href.startsWith("https://");
+    const external =
+      href.startsWith("http://") ||
+      href.startsWith("https://") ||
+      href.endsWith(".pdf");
 
     return (
       <a
