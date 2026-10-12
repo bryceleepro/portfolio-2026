@@ -87,6 +87,12 @@ body {
   margin-bottom: var(--space-md);
 }
 
+@media (max-width: 767px) {
+  .site-shell:has(.about) .site-header-slot {
+    margin-bottom: 4rem;
+  }
+}
+
 .site-header-bar {
   padding: max(var(--header-top), env(safe-area-inset-top, 0px))
     var(--page-gutter) 8px;
