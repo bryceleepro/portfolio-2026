@@ -7,8 +7,13 @@ export type CaseListItem = {
   text: string;
 };
 
+export type CaseTextLink = {
+  phrase: string;
+  href: string;
+};
+
 export type CaseBlock =
-  | { type: "p"; text: string }
+  | { type: "p"; text: string; links?: CaseTextLink[] }
   | { type: "ol"; items: CaseListItem[] }
   | {
       type: "figure";
@@ -223,6 +228,12 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           {
             type: "p",
             text: "From institutions that had yet to hold USDC or enroll in an earning program to those already earning the highest rate and eligible for additional opportunities, I designed targeted in-product promotions for clients across different stages of adoption. I also designed the institutional USDC website to help prospective clients learn about the benefits of USDC on Coinbase Prime.",
+            links: [
+              {
+                phrase: "institutional USDC website",
+                href: "https://www.coinbase.com/institutional/usdc",
+              },
+            ],
           },
           {
             type: "figure",

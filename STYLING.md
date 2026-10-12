@@ -25,8 +25,9 @@ Defined in `app/globals.css`.
 | `--chip` | `#f0f0f0` | Chip fill. Solid. |
 | `--tile` | `#dbdbdb` | Work card placeholder |
 | `--reroll-ring` | `#e6e6e6` | Legacy ring gray. Still used as `--media-stroke`. |
-| `--reroll-fill` | `#2c2c2c` | Reroll rest fill. Slightly lighter than `#222222`. |
-| `--reroll-fill-hover` | `#000000` | Reroll hover / spin fill |
+| `--reroll-fill` | `#000000` | Reroll rest fill |
+| `--reroll-fill-hover` | `#222222` | Reroll hover / spin fill. A step lighter than rest. |
+| `--case-link-underline` | `#cccccc` | Default underline on `.case-link`. Same gray as `--media-stroke-hover`. |
 | `--reroll-icon` | `#ffffff` | Drawn in `/icons/reroll.svg` |
 | `--reroll-radius` | `100px` | Rest (circle) |
 | `--reroll-radius-hover` | `8px` | Hover and while spinning |
@@ -127,6 +128,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 - Case study Back uses Next.js `Link` with `.action.action--back`. The Material arrow (weight 300, left) sits before the label and stays visible. Hover / focus-visible nudges the arrow 4px left over 180ms. Reduced motion keeps it still.
 - Case study **Back to top** sits on its own line after the last section (up arrow, weight 300). Hover / focus-visible nudges the arrow 4px up over 180ms. Click smooth-scrolls to the top; reduced motion jumps and skips the nudge.
 - Case study footer left is “Thanks for reading! Let's keep in touch.” (16px muted). Home keeps “Updated …”. About has no footer.
+- Inline case-study links (`.case-link`): text `--tab-idle` (`#707070`), underline `--case-link-underline` (`#cccccc`). Hover / focus-visible go to `--foreground` (text and underline). External links open in a new tab with `noopener noreferrer`. First use: “institutional USDC website” → `https://www.coinbase.com/institutional/usdc`.
 
 ### Text action (`.action`)
 
@@ -139,9 +141,9 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 
 ### Button / reroll (`.reroll`)
 
-- Native 40×40 button. Rest: `--reroll-fill` `#2c2c2c`, no stroke, `--reroll-radius` 100px (circle), white icon (`/icons/reroll.svg`, do not override SVG width/height). Hit target is the control; no extra slop.
-- Hover / focus: fill `--reroll-fill-hover` `#000000`, radius 8px (`--reroll-radius-hover`).
-- Click: locks the 8px / black shape (`.reroll--spinning`) and the button spins clockwise 360° (480ms). Rotation snaps to 0°; radius and fill ease back to the circle over 180ms, same as hover. If the pointer is still over it, hover keeps the 8px square.
+- Native 40×40 button. Rest: `--reroll-fill` `#000000`, no stroke, `--reroll-radius` 100px (circle), white icon (`/icons/reroll.svg`, do not override SVG width/height). Hit target is the control; no extra slop.
+- Hover / focus: fill `--reroll-fill-hover` `#222222`, radius 8px (`--reroll-radius-hover`).
+- Click: locks the 8px / `#222222` shape (`.reroll--spinning`) and the button spins clockwise 360° (480ms). Rotation snaps to 0°; radius and fill ease back to the circle over 180ms, same as hover. If the pointer is still over it, hover keeps the 8px square.
 - Chips pick a random *other* variant. First load is always intro variant 0.
 
 ## Components
@@ -185,6 +187,18 @@ Figma vectors, native size preserved:
 - `/public/media/usdc/` — USDC figures (kebab-case). `banners.png` is Focus 1; `enrollment-modal.png` is Focus 2. Home thumb and Focus 3 share `earn-hero-alt-4.png`. Earlier Earn Center stills stay on disk. Source stills stay in `usdc_case_study_visuals/`.
 
 ## Changelog
+
+### 2026-10-11 — Fainter case-link underline, darker reroll hover
+
+- `.case-link` underline at rest is `--case-link-underline` (`#cccccc`); the words stay `--tab-idle`. Hover still takes both to `--foreground`.
+- Reroll hover / spin fill is `#222222` (was `#2c2c2c`).
+- Why: the default underline was competing with the words; hover needed a slightly deeper gray.
+
+### 2026-10-11 — Reroll fill swap and USDC site link
+
+- Reroll rest is `#000000`; hover / spin is `#2c2c2c`. Radius behavior is unchanged.
+- Focus 1 copy links “institutional USDC website” (underline, `--tab-idle` → `--foreground` on hover) to `https://www.coinbase.com/institutional/usdc` in a new tab.
+- Why: reverse the two reroll fills; the website mention should be an obvious outbound link.
 
 ### 2026-10-11 — LinkedIn new tab, tighter work-card gap, footer date
 

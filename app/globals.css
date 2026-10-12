@@ -12,8 +12,9 @@
   --chip: #f0f0f0;
   --tile: #dbdbdb;
   --reroll-ring: #e6e6e6;
-  --reroll-fill: #2c2c2c;
-  --reroll-fill-hover: #000000;
+  --reroll-fill: #000000;
+  --reroll-fill-hover: #222222;
+  --case-link-underline: #cccccc;
   --reroll-icon: #ffffff;
   --reroll-radius: 100px;
   --reroll-radius-hover: 8px;
@@ -686,6 +687,24 @@ a.tab {
 .case-list {
   color: var(--foreground-muted);
   font-weight: 400;
+}
+
+.case-link {
+  color: var(--tab-idle);
+  text-decoration: underline;
+  text-decoration-color: var(--case-link-underline);
+  text-underline-offset: 2px;
+}
+
+.case-link:hover,
+.case-link:focus-visible {
+  color: var(--foreground);
+  text-decoration-color: currentColor;
+}
+
+.case-link:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
 }
 
 .case-list {

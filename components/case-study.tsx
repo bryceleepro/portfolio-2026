@@ -1,9 +1,49 @@
+import type { ReactNode } from "react";
 import { MediaFrame } from "@/components/media-frame";
-import type { CaseBlock, CaseSection } from "@/lib/case-studies";
+import type { CaseBlock, CaseSection, CaseTextLink } from "@/lib/case-studies";
+
+function linkedCopy(text: string, links?: CaseTextLink[]) {
+  if (!links?.length) {
+    return text;
+  }
+
+  const nodes: ReactNode[] = [];
+  let remaining = text;
+
+  for (const link of links) {
+    const index = remaining.indexOf(link.phrase);
+    if (index === -1) {
+      continue;
+    }
+
+    if (index > 0) {
+      nodes.push(remaining.slice(0, index));
+    }
+
+    nodes.push(
+      <a
+        key={`${link.href}-${link.phrase}`}
+        className="case-link"
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {link.phrase}
+      </a>,
+    );
+    remaining = remaining.slice(index + link.phrase.length);
+  }
+
+  if (remaining) {
+    nodes.push(remaining);
+  }
+
+  return nodes;
+}
 
 function CaseBlockView({ block }: { block: CaseBlock }) {
   if (block.type === "p") {
-    return <p className="case-copy">{block.text}</p>;
+    return <p className="case-copy">{linkedCopy(block.text, block.links)}</p>;
   }
 
   if (block.type === "ol") {
