@@ -11,7 +11,7 @@ export const site = {
   /** Set once a public repo exists; footer date becomes a link. */
   githubHref: "",
   /** Used until git history exists; then swap to last-commit date. */
-  updatedAt: "2026-09-30",
+  updatedAt: "2026-10-11",
   caseClose: "Thanks for reading! Let's keep in touch.",
 };
 

@@ -31,8 +31,16 @@ export function TextAction({
   );
 
   if (href) {
+    const external = href.startsWith("http://") || href.startsWith("https://");
+
     return (
-      <a href={href} className="action">
+      <a
+        href={href}
+        className="action"
+        {...(external
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
+      >
         {children}
         {icon}
       </a>

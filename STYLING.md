@@ -41,7 +41,7 @@ Defined in `app/globals.css`.
 | `--space-back` | `24px` | Back → title only |
 | `--space-block` | `24px` | Text ↔ figure |
 | `--space-copy` | `24px` | Heading block → body; paragraph → paragraph; paragraph → list |
-| `--work-gap` | `var(--space-md)` | Between work cards |
+| `--work-gap` | `44px` | Between work cards. 16px tighter than `--space-md` (8px step). |
 | `--line-gap` | `12px` | Intro rows |
 | `--chip-gap` | `8px` | Chip clusters |
 | `--nav-gap` | `32px` | Header tabs and header actions |
@@ -102,7 +102,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 | Heading block → body; para → para; para → list; text ↔ figure; Back → title; About title → body | 24px | `--space-copy`, `--space-block`, `--space-back` |
 | Nav → Back; date → section; section → section; last content → Back to top → thanks | 60px | `--space-md` |
 | Home: nav → intro; intro → work; work → footer | 120px | `--space-lg` |
-| Work cards | 60px | `--work-gap` → `--space-md` |
+| Work cards | 44px | `--work-gap` |
 | Intro rows | 12px | `--line-gap` |
 | Intro → reroll | 24px | hardcoded on `.intro` |
 | Header tabs / header actions | 32px | `--nav-gap` |
@@ -130,7 +130,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 
 ### Text action (`.action`)
 
-- Resume, LinkedIn: `<a>` with Figma 16px icons (`/icons/resume.svg`, `/icons/linkedin.svg`) — external-arrow.
+- Resume, LinkedIn: `<a>` with Figma 16px icons (`/icons/resume.svg`, `/icons/linkedin.svg`) — external-arrow. `http(s)` hrefs (LinkedIn) open in a new tab with `rel="noopener noreferrer"`. Resume stays `#` until a file exists.
 - Email: label is always “Email”. Hover shows the 16px copy icon. Press copies `site.email` and shows the 18px check for 800ms even if the pointer leaves. Then the icon hides; if the pointer is still on Email, it stays hidden until leave (so the copy icon doesn’t pop back immediately).
 - Resume/LinkedIn icons sit in a 0-width wrapper and open to 16px / opacity 1 on hover and focus. Why: Figma hid those layers until hover.
 - 8px padding above and below the label (`--action-pad-y`), pulled back with −8px margin so the header/footer line doesn’t drop. Shared with Work / About. Reroll stays the 40×40 circle.
@@ -164,11 +164,11 @@ Fixed labels + cycling HeroUI chips. The gray fill lives on `.intro__chip-track`
 
 ### Site footer (`.site-footer`) — 2026-09-30
 
-Hidden on About. On home: “Updated …” from `site.updatedAt` (14px, `--label`; GitHub link if `site.githubHref` is set). On case studies: “Thanks for reading! Let's keep in touch.” (16px, `--label`). Resume, LinkedIn, Email with the same hover icons as the header. 120px above the work list on home; 60px above the thanks line (same as last content → Back to top). Why: Figma footer; no git remote yet. About is short enough that a second contact row is redundant.
+Hidden on About. On home: “Updated …” from `site.updatedAt` (14px, `--label`; GitHub link if `site.githubHref` is set). Current date is October 11, 2026. On case studies: “Thanks for reading! Let's keep in touch.” (16px, `--label`). Resume, LinkedIn, Email with the same hover icons as the header. LinkedIn opens in a new tab. 120px above the work list on home; 60px above the thanks line (same as last content → Back to top). Why: Figma footer. About is short enough that a second contact row is redundant.
 
 ### About / case study (`.page-title`, `.about`, `.blank-copy`, `.case-back`, `.case`) — 2026-10-06
 
-About opens with “Hello! I'm Bryce.” in the case-study title style (20px Satoshi Medium, black, line-height 1.3). The tab already says About, so the page does not repeat it. Three body paragraphs follow (`.case-copy`: 16px / 1.5, Satoshi Regular, `--foreground-muted`). Title → first paragraph and paragraph → paragraph are 24px (`--space-copy`). No photo yet; no Back / Back to top; no footer. Header still uses the home 120px gap. Case studies keep Back, then title (20px Medium, black, line-height 1.3), a muted date (16px / 1.5), and sections. Body, ledes, lists, and section labels are 16px / 1.5. Captions are 14px / 1.4, centered under the tile. After the last section: 60px, Back to top, 60px, then the footer thanks line. Spacing: 8 / 24 / 60 (see Space). Home stays at 120px large gaps. Work cards sit 60px apart. **Titles keep their written case; everything else is sentence case** (dates, ledes, labels, body). Activities date is “Summer 2025”. USDC home chip and page share “Scaling the Institutional USDC Experience” and “2025 - present”. USDC section labels are Overview and Focus 1–3 (numbered like Principle n, so they don’t repeat the lede). Focus 1 uses `banners.png` (`usdcBanners`: 6400×5040, 471px off top and bottom — about 48px at the rendered width). Focus 2 uses `enrollment-modal.png` at native 6400×3600 (`usdcEnrollmentModal`). Focus 3 uses `earn-hero-alt-4.png` at native 4800×2688 (`usdcEarnHero`). All three fill the column with the same 1px `--media-stroke` as other figures. Case-study figures fill the 700px measure. Cropped media is sized so the visible window is 100% of the frame; overflow clips the insets (not `object-fit: cover`). Case-study videos hang 2px below the clip to hide the green H.264 chroma row on the last source line. Activities crops are per visual (pixel insets on `crop`) and do not try to share one zoom — full-page shots and tight component shots are different patterns. Solution / splitting / copy / final / video-authorization trim leftover export lines (1–3px). Solution is −3px left, −2px right, −2px bottom. Iteration 2 and error states use a centered crop at their zoom. Iteration 1 is unchanged. Every figure and work card has a 1px `--media-stroke`. Work-card tiles use `--work-ratio` (`700 / 400`) so height follows the column. Home lists Activities and USDC only; the Exploring card is held for a later launch. Why: related lines sit together; new sections get more air.
+About opens with “Hello! I'm Bryce.” in the case-study title style (20px Satoshi Medium, black, line-height 1.3). The tab already says About, so the page does not repeat it. Three body paragraphs follow (`.case-copy`: 16px / 1.5, Satoshi Regular, `--foreground-muted`). Title → first paragraph and paragraph → paragraph are 24px (`--space-copy`). No photo yet; no Back / Back to top; no footer. Header still uses the home 120px gap. Case studies keep Back, then title (20px Medium, black, line-height 1.3), a muted date (16px / 1.5), and sections. Body, ledes, lists, and section labels are 16px / 1.5. Captions are 14px / 1.4, centered under the tile. After the last section: 60px, Back to top, 60px, then the footer thanks line. Spacing: 8 / 24 / 60 (see Space). Home stays at 120px large gaps. Work cards sit 44px apart. **Titles keep their written case; everything else is sentence case** (dates, ledes, labels, body). Activities date is “Summer 2025”. USDC home chip and page share “Scaling the Institutional USDC Experience” and “2025 - present”. USDC section labels are Overview and Focus 1–3 (numbered like Principle n, so they don’t repeat the lede). Focus 1 uses `banners.png` (`usdcBanners`: 6400×5040, 471px off top and bottom — about 48px at the rendered width). Focus 2 uses `enrollment-modal.png` at native 6400×3600 (`usdcEnrollmentModal`). Focus 3 uses `earn-hero-alt-4.png` at native 4800×2688 (`usdcEarnHero`). All three fill the column with the same 1px `--media-stroke` as other figures. Case-study figures fill the 700px measure. Cropped media is sized so the visible window is 100% of the frame; overflow clips the insets (not `object-fit: cover`). Case-study videos hang 2px below the clip to hide the green H.264 chroma row on the last source line. Activities crops are per visual (pixel insets on `crop`) and do not try to share one zoom — full-page shots and tight component shots are different patterns. Solution / splitting / copy / final / video-authorization trim leftover export lines (1–3px). Solution is −3px left, −2px right, −2px bottom. Iteration 2 and error states use a centered crop at their zoom. Iteration 1 is unchanged. Every figure and work card has a 1px `--media-stroke`. Work-card tiles use `--work-ratio` (`700 / 400`) so height follows the column. Home lists Activities and USDC only; the Exploring card is held for a later launch. Why: related lines sit together; new sections get more air.
 
 ## Assets
 
@@ -185,6 +185,13 @@ Figma vectors, native size preserved:
 - `/public/media/usdc/` — USDC figures (kebab-case). `banners.png` is Focus 1; `enrollment-modal.png` is Focus 2. Home thumb and Focus 3 share `earn-hero-alt-4.png`. Earlier Earn Center stills stay on disk. Source stills stay in `usdc_case_study_visuals/`.
 
 ## Changelog
+
+### 2026-10-11 — LinkedIn new tab, tighter work-card gap, footer date
+
+- LinkedIn (`http(s)` text actions) opens in a new tab with `noopener noreferrer`. Resume stays same-tab until it has a real URL.
+- `--work-gap` is 44px (was 60). Case-study `--space-md` stays 60.
+- Footer date is October 11, 2026.
+- Why: keep the portfolio tab; cards were a step too far apart; the shipped date should match this cut.
 
 ### 2026-10-11 — Work cards keep 700/400 as the column shrinks
 
