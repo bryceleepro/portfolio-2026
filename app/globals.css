@@ -358,6 +358,12 @@ a.tab {
   margin-bottom: var(--space-lg);
 }
 
+@media (max-width: 767px) {
+  .intro {
+    margin-bottom: calc(var(--space-lg) + var(--space-copy));
+  }
+}
+
 .intro__lines {
   display: flex;
   flex-direction: column;

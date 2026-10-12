@@ -106,6 +106,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 | Heading block → body; para → para; para → list; text ↔ figure; Back → title; About title → body | 24px | `--space-copy`, `--space-block`, `--space-back` |
 | Nav → Back; date → section; section → section; last content → Back to top → thanks | 60px | `--space-md` |
 | Home: nav → intro; intro → work; work → footer | 120px | `--space-lg` |
+| Compact intro → work | 144px | `--space-lg` + `--space-copy` (24px extra under the reroll) |
 | Work cards | 44px | `--work-gap` |
 | Intro rows | 12px | `--line-gap` |
 | Wrapped intro chip lines | 4px | `--chip-wrap-gap` |
@@ -167,7 +168,7 @@ Work + About left (32px gap); Resume + LinkedIn + Email right. Idle tabs `#70707
 
 ### Intro (`.intro`, `.intro__line`, `.intro__chip-track`) — 2026-09-30
 
-Fixed labels + cycling HeroUI chips. Each row is a sentence (label, then one or more hugging pills). The gray fill lives on `.intro__chip-track` so width can hug content while radius stays. Intro lines are 100% of the column so wrap is decided against that width, not the current chip hug. If the chip cannot fit beside the label, extra words become their own pills on the next row, 4px below. 12px between the three sentences, 24px to reroll. The lines block’s min-height is the tallest variant at the current column (every wrap counted), so the reroll button stays put when copy is shorter. Why: Figma “Sentence Style” / re-roll set `13:226`.
+Fixed labels + cycling HeroUI chips. Each row is a sentence (label, then one or more hugging pills). The gray fill lives on `.intro__chip-track` so width can hug content while radius stays. Intro lines are 100% of the column so wrap is decided against that width, not the current chip hug. If the chip cannot fit beside the label, extra words become their own pills on the next row, 4px below. 12px between the three sentences, 24px to reroll. The lines block’s min-height is the tallest variant at the current column (every wrap counted), so the reroll button stays put when copy is shorter. Below 768px, intro → work is 144px (120 + 24) so the reroll reads with the intro, not the first card. Why: Figma “Sentence Style” / re-roll set `13:226`.
 
 ### Work card (`.work-card`) — 2026-09-30
 
@@ -197,6 +198,11 @@ Figma vectors, native size preserved:
 - `/public/media/usdc/` — USDC figures (kebab-case). `banners.png` is Focus 1; `enrollment-modal.png` is Focus 2. Home thumb and Focus 3 share `earn-hero-alt-4.png`. Earlier Earn Center stills stay on disk. Source stills stay in `usdc_case_study_visuals/`.
 
 ## Changelog
+
+### 2026-10-12 — Compact intro sits 24px farther from the first card
+
+- Below 768px, `.intro` margin-bottom is 144px (`--space-lg` + `--space-copy`). Desktop stays 120px.
+- Why: the pinned reroll was reading with the work cards; 24px more air ties it back to the intro.
 
 ### 2026-10-11 — Reroll stays at the lowest intro slot
 
