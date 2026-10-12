@@ -6,8 +6,8 @@ Living log for this portfolio. Read before any UI work. Update in the same turn 
 
 - Intentional, minimal, elegant. Type and space do most of the work.
 - Quiet chrome. Home *is* the work list. Contact is hover-reveal actions, not a page.
-- Motion only to focus attention (chip cycle, reroll spin, action-icon reveal, work-card hover, Back / Back to top arrow nudge, tab underline slide).
-- Light theme. Desktop look from Figma `Desktop - 1` (`1:2`). Work cards and case figures keep their ratio as the column shrinks; no breakpoint system.
+- Motion only to focus attention (chip cycle, reroll spin, action-icon reveal, work-card hover, Back / Back to top arrow nudge, tab underline slide, hamburger-to-X).
+- Light theme. Desktop look from Figma `Desktop - 1` (`1:2`). Work cards and case figures keep their ratio as the column shrinks. One nav breakpoint at 768px.
 - HeroUI primitives (`Link`, `Chip`) stay semantic; look comes from tokens and layout classes.
 
 ## Tokens
@@ -45,6 +45,7 @@ Defined in `app/globals.css`.
 | `--work-gap` | `44px` | Between work cards. 16px tighter than `--space-md` (8px step). |
 | `--line-gap` | `12px` | Intro rows |
 | `--chip-gap` | `8px` | Chip clusters |
+| `--chip-wrap-gap` | `4px` | Between a wrapped intro chip and its overflow pill. Tighter than `--chip-gap` so those two read as one chip. |
 | `--nav-gap` | `32px` | Header tabs and header actions |
 | `--footer-gap` | `24px` | Footer actions |
 | `--action-pad-y` | `8px` | Vertical hit padding on tabs and text actions. Not reroll or work cards. |
@@ -66,6 +67,8 @@ Defined in `app/globals.css`.
 | `--tab-slide-duration` | `280ms` | Underline travel between Work and About |
 | `--work-press-scale` | `0.98` | Work-card hover / focus shrink |
 | `--work-ratio` | `700 / 400` | Work-card tile. Height follows column width, same as case figures. |
+| `--nav-break` | `768px` | Compact header: Work, About, hamburger. Not 900 — the column is already 700. |
+| `--header-fade` | `32px` | Single white-to-clear fade under the header only when it returns on scroll-up. |
 
 Type family: **Satoshi** Regular (Fontshare), weight 400, for body and chrome; Medium 500 for case-study emphasis. **Space Grotesk** Regular (Google), weight 400, for chips and case-study section headers.
 
@@ -105,6 +108,7 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 | Home: nav → intro; intro → work; work → footer | 120px | `--space-lg` |
 | Work cards | 44px | `--work-gap` |
 | Intro rows | 12px | `--line-gap` |
+| Wrapped intro chip lines | 4px | `--chip-wrap-gap` |
 | Intro → reroll | 24px | hardcoded on `.intro` |
 | Header tabs / header actions | 32px | `--nav-gap` |
 | Footer actions | 24px | `--footer-gap` |
@@ -114,17 +118,21 @@ Case-study proximity is **8 / 24 / 60**. Home large gaps stay **120**. Do not in
 | Back / Back to top horizontal hit padding | 16px | `--action-pad-x` on `.action--back` only (offset so the label doesn’t shift). |
 | Work-card chips from bottom-left | 16px | `.work-card__meta` |
 | Shell bottom padding | 4rem | `.site-shell` |
+| Compact menu panel inset | 16px | `.site-header__actions` below 768 |
+| Compact menu below hamburger | 8px | |
 
 ### Chip (HeroUI `Chip` + `.chip`)
 
 - Read-only. Fill `--chip` (`#f0f0f0`, solid). Radius 4px, padding 4×8. Labels use Space Grotesk 400 (`--font-chip`); size and weight stay 16/14 and 400.
 - `.chip--emphasis`: 14px black (work company). Specificity `.chip.chip--emphasis` so it wins over intro 16px.
 - `.chip--meta`: 14px `--chip-muted` (`#484848`) for work title and year.
-- Cycle: the chip fill retracts left to padding-only width (hug, overflow clips text). New copy swaps, then each fill grows left-to-right to hug the new text, staggered 70ms (first → third). No vertical scale.
+- Cycle: the chip fill retracts left to padding-only width (hug, overflow clips text). New copy swaps, then each fill grows left-to-right to hug the new text, staggered 70ms (first → third). Overflow chips on a wrapped row share that row’s delay. No vertical scale.
+- Intro chips wrap by splitting into one-line pills. The first pill stays beside the label. The rest start on the next row, under the label and first pill, with 4px (`--chip-wrap-gap`) between them. Each pill still uses the retract/grow cycle. Wrap is measured against the full 700px column, not the hugging content, so a desktop reroll does not flip between one and two lines.
 
 ### Link / tab (`.tab`)
 
 - Work / About use Next.js `Link` (client routing). Idle tabs are `--tab-idle`; hover / focus / active are `--foreground`. A single 24×1px mark sits under the active label and slides 280ms when moving between Work and About. Work is active only on `/`; About only on `/about`. Case studies hide the mark (both tabs idle). Reduced motion jumps. Same 8px vertical hit padding as the other chrome controls (`--action-pad-y`).
+- Below 768px: Work + About stay; Resume / LinkedIn / Email move into a hamburger menu (18px marks in a 40×40 hit). Bars are 13×1 at y 5 / 9 / 13 (equal 3px gaps). Open morphs the three bars into an X (180ms); close morphs back. Reduced motion jumps. Panel is right-aligned, 8px radius, 1px `--media-stroke`, 16px pad, 24px stack. Icons stay visible in the panel (no hover-reveal). Escape or outside press closes it.
 - Case study Back uses Next.js `Link` with `.action.action--back`. The Material arrow (weight 300, left) sits before the label and stays visible. Hover / focus-visible nudges the arrow 4px left over 180ms. Reduced motion keeps it still.
 - Case study **Back to top** sits on its own line after the last section (up arrow, weight 300). Hover / focus-visible nudges the arrow 4px up over 180ms. Click smooth-scrolls to the top; reduced motion jumps and skips the nudge.
 - Case study footer left is “Thanks for reading! Let's keep in touch.” (16px muted). Home keeps “Updated …”. About has no footer.
@@ -154,11 +162,11 @@ Centered 700px column, 24px top, 24px side gutter, 4rem bottom. Why: Figma deskt
 
 ### Site header (`.site-header`) — 2026-09-30
 
-Work + About left (32px gap); Resume + LinkedIn + Email right. Idle tabs `#707070`; hover and the active tab are black. One 24×1px mark slides between them (280ms). Case studies show no mark. 120px below to intro on home; 60px below to Back on case studies. Why: left side is tabs; right side is destinations/copy.
+Work + About left (32px gap); Resume + LinkedIn + Email right. Idle tabs `#707070`; hover and the active tab are black. One 24×1px mark slides between them (280ms). Case studies show no mark. 120px below to intro on home; 60px below to Back on case studies. The bar sits in document flow and scrolls away with the page — it does not pin. After it has left the viewport, scroll-up brings it back as a fixed overlay (`.site-header-bar--return`) with one 32px white-to-clear fade underneath. Scroll-down dismisses the overlay. Near the top, the in-flow header takes over again. Reduced motion: no overlay. Below 768px the right side is a hamburger that opens the three actions. Why: left side is tabs; right side is destinations/copy.
 
 ### Intro (`.intro`, `.intro__line`, `.intro__chip-track`) — 2026-09-30
 
-Fixed labels + cycling HeroUI chips. The gray fill lives on `.intro__chip-track` so width can hug content while radius stays. 12px row gap, 24px to reroll. Why: Figma “Sentence Style” / re-roll set `13:226`.
+Fixed labels + cycling HeroUI chips. Each row is a sentence (label, then one or more hugging pills). The gray fill lives on `.intro__chip-track` so width can hug content while radius stays. Intro lines are 100% of the column so wrap is decided against that width, not the current chip hug. If the chip cannot fit beside the label, extra words become their own pills on the next row, 4px below. 12px between the three sentences, 24px to reroll. Why: Figma “Sentence Style” / re-roll set `13:226`.
 
 ### Work card (`.work-card`) — 2026-09-30
 
@@ -176,6 +184,7 @@ About opens with “Hello! I'm Bryce.” in the case-study title style (20px Sat
 
 Figma vectors, native size preserved:
 
+- `/public/icons/menu.svg` — original 18×18 Material hamburger. The toggle draws three 13×1 CSS bars at y 5 / 9 / 13 so they can morph to an X with even gaps.
 - `/public/icons/reroll.svg` — 40×40 white refresh icon; the button now draws the fill and radius (`13:319` path kept)
 - `/public/icons/resume.svg` — 16×16 hover (`17:479`)
 - `/public/icons/linkedin.svg` — 16×16 hover (`17:491`, same arrow as resume)
@@ -187,6 +196,52 @@ Figma vectors, native size preserved:
 - `/public/media/usdc/` — USDC figures (kebab-case). `banners.png` is Focus 1; `enrollment-modal.png` is Focus 2. Home thumb and Focus 3 share `earn-hero-alt-4.png`. Earlier Earn Center stills stay on disk. Source stills stay in `usdc_case_study_visuals/`.
 
 ## Changelog
+
+### 2026-10-11 — Tighter overflow chips; even hamburger bars
+
+- Wrapped intro pills sit 4px apart (`--chip-wrap-gap`), not 8. Label → chip stays 8px; sentence rows stay 12px.
+- Hamburger bars are 13×1 at y 5 / 9 / 13 so the two gaps match (the SVG fractions rounded tighter between bars 1–2).
+- Why: overflow should read as one chip; the icon looked top-heavy.
+
+### 2026-10-11 — Desktop reroll no longer flips wrap
+
+- Intro lines are 100% of the column. Wrap width is taken from that column and only updates when the column itself resizes, not when a chip shrinks.
+- Hug measure uses `max-content` so the pop does not pick up a stretched row width.
+- Why: on desktop the wrap check was using the hugging content box, which narrowed during reroll and flickered between one and two lines.
+
+### 2026-10-11 — Wrapped chips gap + shared retract animation
+
+- Overflow intro copy is its own one-line pill, 8px under the first (`--chip-gap`), so the fills don’t touch.
+- Reroll uses the original width retract/grow on every pill, including overflow. Same stagger per sentence.
+- Why: cloned inline fragments sat on top of each other, and clip-path only animated the first line’s bounding box.
+
+### 2026-10-11 — Intro chips wrap to a second line
+
+- Intro rows are inline sentences, not flex. A long chip stays beside its label on line 1 and wraps under the label + chip on line 2. Clone the fill so each fragment still looks like a chip. Row line-height is 28px so the two fills don’t overlap.
+- Reroll still retracts/grows the fill (`clip-path` instead of `width`, so wrap can stay inline). Desktop and compact.
+- Why: nowrap chips jumped as a whole unit when the column was too narrow.
+
+### 2026-10-11 — Hamburger bar weight matches menu.svg
+
+- CSS bars are 13.17×1.08 (was 14×2, 1px radius), same as `/icons/menu.svg` at 18px. X morph still uses those bars.
+- Why: 2px read heavier than the Material hamburger that was there before the morph.
+
+### 2026-10-11 — Hamburger morphs to an X
+
+- Compact menu toggle is three CSS bars. Open rotates the outer bars into an X and fades the middle; close reverses (180ms). Reduced motion jumps.
+- Why: the open state needed a close affordance that still feels like the same control.
+
+### 2026-10-11 — Header scrolls away; one fade on return
+
+- Header is no longer sticky. It leaves with the page. Scroll-up after it is gone shows a fixed overlay; scroll-down hides that overlay. Desktop and compact.
+- Only the returning overlay has a fade: solid white, then one 32px gradient. Removed the second fade on the bar itself.
+- Why: pinning then hiding felt like a pop; two stacked fades left a gap.
+
+### 2026-10-11 — Sticky header and compact nav below 768
+
+- Header bar is sticky. Scroll down hides it; scroll up or the top of the page shows it. Same on desktop and mobile. Reduced motion keeps it visible.
+- Below 768px: Work + About + hamburger. Resume, LinkedIn, and Email open in a small panel. 768, not 900, because the measure is already 700px.
+- Why: five chrome labels do not fit a phone column; hide-on-scroll keeps the case study in view.
 
 ### 2026-10-11 — Fainter case-link underline, darker reroll hover
 
