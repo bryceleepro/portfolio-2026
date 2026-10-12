@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import { Chip } from "@heroui/react";
+import { Chip } from "@/components/chip";
 import { MediaFrame } from "@/components/media-frame";
 import { getCaseStudy } from "@/lib/case-studies";
 import { works } from "@/lib/content";
