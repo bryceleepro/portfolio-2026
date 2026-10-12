@@ -1,0 +1,19 @@
+---
+description: Keep STYLING.md as the source of truth for every visual change
+alwaysApply: true
+---
+
+# Styling log
+
+Before any UI, layout, token, or HeroUI component work, read [STYLING.md](STYLING.md).
+
+After any visual change in the same turn, update `STYLING.md`:
+
+- Tokens (color, type, space, radius, motion)
+- Primitives (links, buttons, type scale, lists)
+- Components (header, work row, case-study layout, etc.)
+- Changelog, newest first: date, what changed, why
+
+If it is not in `STYLING.md`, it did not happen.
+
+Do not invent a parallel design system. Override HeroUI via CSS variables and documented classes only.
